@@ -8,7 +8,7 @@ RUN rm /etc/apt/sources.list.d/cuda.list && \
     apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/3bf863cc.pub && \
     apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64/7fa2af80.pub
 RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y sudo graphviz && \
+    DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y sudo graphviz libgl1-mesa-dev && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN useradd --create-home --shell /bin/bash --user-group --groups adm,sudo,audio,video,dialout user && \
     echo "user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
@@ -16,7 +16,7 @@ RUN useradd --create-home --shell /bin/bash --user-group --groups adm,sudo,audio
 RUN mkdir /.jupyter && chmod 777 /.jupyter && \
     mkdir /.cache && chmod 777 /.cache && \
     mkdir /.config && chmod 777 /.config
-RUN python3 -m pip install jupyterlab pandas pillow scipy sklearn seaborn pydot
+RUN python3 -m pip install jupyterlab pandas pillow scipy sklearn seaborn pydot opencv-python
 RUN python3 -m pip install keras_cv_attention_models
 
 CMD [ "bash", "-c", "source /etc/bash.bashrc && /usr/local/bin/jupyter lab --notebook-dir=/tf --ip 0.0.0.0 --no-browser --allow-root" ]
